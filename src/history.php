@@ -59,8 +59,8 @@ if (isset($_GET['logout'])) {
                 <h1>PEDULI DIRI</h1>
                 <p>Catatan Perjalanan</p>
                 <nav class="nav mb-3">
-                    <a class="nav-link active" aria-current="page" href="dashboard.php">Home</a>
-                    <a class="nav-link" href="history.php">Catatan Perjalanan</a>
+                    <a class="nav-link" aria-current="page" href="dashboard.php">Home</a>
+                    <a class="nav-link active" href="history.php">Catatan Perjalanan</a>
                     <a class="nav-link" href="form.php">Isi Data</a>
                     <a class="nav-link" href="dashboard.php?logout=true">Logout</a>
                 </nav>

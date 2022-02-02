@@ -1,6 +1,9 @@
 <?php
     class FileSystem {
         function read_csv($filename) {
+            if (!is_file($filename)) {
+                file_put_contents($filename, "Date,Hour,Location,Temperature");
+            } 
             $rows = array();
             foreach (file($filename, FILE_IGNORE_NEW_LINES) as $line) {
                 $rows[] = str_getcsv($line);

@@ -1,7 +1,7 @@
 <?php
     include "core/init.inc.php";
     include "constants/filename.php";
-    require "services/file.php";
+    include "services/file.php";
 
     Class Auth {
         function doLogin($nik, $name) {

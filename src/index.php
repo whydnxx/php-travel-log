@@ -15,6 +15,7 @@ if (isset($_POST['register'])) {
     $auth->doRegister($_REQUEST["nik"], $_REQUEST["name"]);
     // Set session to notify user logged in
     $_SESSION['name'] = $_REQUEST["name"];
+    $_SESSION['nik'] = $_REQUEST["nik"];
     alert("Selamat Bergabung");
     redirect("dashboard.php");
 }
@@ -23,9 +24,10 @@ elseif (isset($_POST['login'])) {
     # Call login on /services/login.php
     $isSuccess = $auth->doLogin($_REQUEST["nik"], $_REQUEST["name"]);
     // Call function alert from core/init.inc.php
-    $_SESSION['name'] = $_REQUEST["name"];
     if ($isSuccess) {
-       alert("Selamat Datang");
+        $_SESSION['name'] = $_REQUEST["name"];
+        $_SESSION['nik'] = $_REQUEST["nik"];
+        alert("Selamat Datang");
        redirect("dashboard.php");
     } else {
         alert("NIK / Nama lengkap salah");
