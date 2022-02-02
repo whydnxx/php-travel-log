@@ -1,9 +1,13 @@
 <?php 
 require "services/auth.php";
+require "services/log.php";
 session_start();
 ob_start();
 
 $auth = new Auth();
+$log = new Log();
+$name = formatName($_SESSION['name']);
+$fileName = "data/logs/{$_SESSION['nik']}-{$name}.csv";
 
 if (!isset($_SESSION['name'])) {
     header("Location: index.php");
@@ -21,7 +25,8 @@ if (isset($_GET['logout'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
-    <title>Dashboard</title>
+    <link href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" >
+    <title>History</title>
     <style>
         html,
         body {
@@ -66,12 +71,37 @@ if (isset($_GET['logout'])) {
                 </nav>
                 <div class="card">
                     <div class="card-body">
-                        Selamat datang <?php echo $_SESSION['name'] ?> di aplikasi peduli diri.
+                    <table id="table-history" class="display">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Waktu</th>
+                                <th>Lokasi</th>
+                                <th>Suhu Tubuh</th>
+                            </tr>
+                        </thead>
+                    </table>
+                        <a href="form.php" class="btn btn-primary">Isi Catatan</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#table-history').dataTable( {
+                "data": <?php echo $log->readAllByFilename($fileName) ?>,
+                "columns" : [
+                    { "data" : "Date" },
+                    { "data" : "Hour" },
+                    { "data" : "Location" },
+                    { "data" : "Temperature" },
+                ]
+            } );
+        } );
+    </script>
 </body>
 </html>
