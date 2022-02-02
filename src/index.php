@@ -1,26 +1,35 @@
 <?php 
 require "services/auth.php";
-include "core/init.inc.php";
 session_start();
+ob_start();
 $auth = new Auth();
 
 // Check apakah sudah login
 if (isset($_SESSION['name'])) {
-    header("Location: dashboard.php");
+    redirect("dashboard.php");
 }
 
 // check if payload is to do register
 if (isset($_POST['register'])) {
     # Call register on /services/login.php
     $auth->doRegister($_REQUEST["nik"], $_REQUEST["name"]);
+    // Set session to notify user logged in
+    $_SESSION['name'] = $_REQUEST["name"];
     alert("Selamat Bergabung");
+    redirect("dashboard.php");
 }
 // check if payload is to do login
 elseif (isset($_POST['login'])) {
     # Call login on /services/login.php
-    $auth->doLogin($_REQUEST["nik"], $_REQUEST["name"]);
+    $isSuccess = $auth->doLogin($_REQUEST["nik"], $_REQUEST["name"]);
     // Call function alert from core/init.inc.php
-    $auth ? alert("Selamat Datang") : alert("NIK / Nama lengkap salah");
+    $_SESSION['name'] = $_REQUEST["name"];
+    if ($isSuccess) {
+       alert("Selamat Datang");
+       redirect("dashboard.php");
+    } else {
+        alert("NIK / Nama lengkap salah");
+    }
 }
 ?>
 
